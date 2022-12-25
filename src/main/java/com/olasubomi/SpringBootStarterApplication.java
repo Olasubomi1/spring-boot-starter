@@ -37,6 +37,17 @@ public class SpringBootStarterApplication {
 		customerRepository.save(customer);
 	}
 
+	record UpdateCustomerRequest(String name, String email, Integer age){}
+	@PutMapping("{customerId}")
+	public void updateCustomer(@RequestBody  Customer customerUpdate, @PathVariable("customerId") Integer id){
+		customerRepository.findById(id).map(customer -> {
+			customer.setName(customerUpdate.getName());
+			customer.setEmail(customerUpdate.getEmail());
+			customer.setAge(customerUpdate.getAge());
+			return customerRepository.save(customer);
+		});
+	}
+
 	@DeleteMapping("{customerId}")
 	public void deleteCustomer(@PathVariable("customerId") Integer id){
 		customerRepository.deleteById(id);
